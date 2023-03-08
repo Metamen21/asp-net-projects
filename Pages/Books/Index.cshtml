@@ -1,0 +1,98 @@
+﻿@page
+@model DemoLibWorld.Pages.Books.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+<br />
+<form asp-controller="=Index" asp-action="Index" method="get">
+    <p>
+        Search Title/Author/Category :<input type="text" name="searchString" />
+        <input type="submit" value="Filter" />
+    </p>
+</form>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <a asp-page="./Index" asp-route-sortorder="@Model.TitleSort">
+                    @Html.DisplayNameFor(model => model.BookEntity[0].Title)
+                </a>
+            </th>
+            <th>
+                <a asp-page="./Index" asp-route-sortorder="@Model.AuthorSort">
+                    @Html.DisplayNameFor(model => model.BookEntity[0].Authorname)
+                </a>
+            </th>
+            <th>
+                <a asp-page="./Index" asp-route-sortorder="@Model.bookCategorySort">
+                    @Html.DisplayNameFor(model => model.BookEntity[0].BookCategories.BookCategoryName)
+                </a>
+            </th>
+            <th>
+                <a asp-page="./Index" asp-route-sortorder="@Model.ReleaseDateSort">
+                    @Html.DisplayNameFor(model => model.BookEntity[0].Releasedate)
+                </a>
+            </th>
+            <th>
+                <a asp-page="./Index" asp-route-sortorder="@Model.RatingSort">
+                    @Html.DisplayNameFor(model => model.BookEntity[0].Rating)
+                </a>
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.BookEntity)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Authorname)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BookCategories.BookCategoryName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Releasedate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Rating)
+                </td>
+                <td>
+                    <a asp-page="./Edit" asp-route-id="@item.BookId">Edit</a> |
+                    <a asp-page="./Details" asp-route-id="@item.BookId">Details</a> |
+                    <a asp-page="./Delete" asp-route-id="@item.BookId">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<br />
+<b>Page&nbsp;@Model.BookEntity.PageIndex</b>&nbsp;Of&nbsp;<b>@Model.BookEntity.TotalPages</b>
+<br />
+@{
+    var prevDisabled = !Model.BookEntity.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.BookEntity.HasNextPage ? "disabled" : "";
+}
+<br />
+<a asp-page="./Index"
+   asp-route-pageIndex="@(Model.BookEntity.PageIndex-1)"
+   class="btn btn-primary @prevDisabled " >
+   Previous
+   </a>
+
+<a asp-page="./Index"
+   asp-route-pageIndex="@(Model.BookEntity.PageIndex+1)"
+   class="btn btn-primary @nextDisabled ">
+    Next
+</a>
